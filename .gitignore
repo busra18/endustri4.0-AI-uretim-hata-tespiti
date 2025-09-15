@@ -1,0 +1,23 @@
+# Veri dosyaları - BUNLARI GİT'E YÜKLEME!
+data/raw/
+data/processed/
+data/external/
+
+# Model dosyaları - BUNLARI DA YÜKLEME!
+models/
+
+# Python geçici dosyaları
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter geçici dosyaları
+.ipynb_checkpoints/
+
+# IDE ayar dosyaları
+.vscode/
+.idea/
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
