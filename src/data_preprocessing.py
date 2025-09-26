@@ -1,35 +1,51 @@
-"""
-📊 VERİ ÖN İŞLEME MODÜLÜ
-Tekstil görüntülerini hazırlar ve temizler
-"""
-
-import numpy as np
+import os
 import cv2
+import numpy as np
 from sklearn.model_selection import train_test_split
 
-def load_data(data_path):
-    """H5 dosyasından veriyi yükler"""
-    import h5py
-    with h5py.File(data_path, 'r') as f:
-        images = np.array(f['images'])
-        labels = np.array(f['labels'])
-    return images, labels
-
-def preprocess_images(images):
-    """Görüntüleri normalize eder ve boyutlandırır"""
-    # Normalizasyon: 0-255 -> 0-1
-    images = images.astype('float32') / 255.0
+def prepare_data(data_dir, img_size=(224, 224), test_size=0.2, random_state=42):
+    """
+    Veri setini yükler, ön işler ve eğitim/test setlerine ayırır.
+    """
+    images = []
+    labels = []
     
-    # Boyut kontrolü
-    if len(images.shape) == 3:
-        images = np.expand_dims(images, axis=-1)
+    categories = ['good', 'defective']
+    for category in categories:
+        path = os.path.join(data_dir, category)
+        label = categories.index(category)
+        print(f'{category} klasöründeki görüntüler işleniyor...')
         
-    return images
+        for img_name in os.listdir(path):
+            try:
+                img_path = os.path.join(path, img_name)
+                img = cv2.imread(img_path)
+                img = cv2.resize(img, img_size)
+                images.append(img)
+                labels.append(label)
+            except Exception as e:
+                print(f'{img_name} dosyası işlenirken hata: {e}')
+    
+    images = np.array(images)
+    labels = np.array(labels)
+    images = images / 255.0
+    
+    X_train, X_test, y_train, y_test = train_test_split(
+        images, labels, test_size=test_size, random_state=random_state, stratify=labels
+    )
+    
+    print('Veri hazırlığı tamamlandı.')
+    return X_train, X_test, y_train, y_test
 
-def split_data(images, labels, test_size=0.2):
-    """Veriyi eğitim ve test olarak ayırır"""
-    return train_test_split(images, labels, test_size=test_size, random_state=42)
+def data_preparation_pipeline():
+    """
+    Ana veri hazırlama pipeline'ı - main.py tarafından çağrılacak
+    """
+    data_path = "data"
+    return prepare_data(data_path)
 
-# Test kodu
 if __name__ == "__main__":
-    print("🔧 Data preprocessing modülü yüklendi")
+    # Test için
+    X_train, X_test, y_train, y_test = data_preparation_pipeline()
+    print(f"Eğitim seti: {X_train.shape}")
+    print(f"Test seti: {X_test.shape}")
