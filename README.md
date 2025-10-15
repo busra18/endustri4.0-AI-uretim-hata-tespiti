@@ -1,6 +1,6 @@
 # endustri4.0-AI-uretim-hata-tespiti
 yapayzeka-poster
--->https://colab.research.google.com/drive/134apR3WtV-73-l_XjPoyKVgfDA1ZQhlc<--
+-->https://colab.research.google.com/drive/134apR3WtV-73-l_XjPoyKVgfDA1ZQhlc?usp=sharing<--
 
 ![Açıklama](C:\Users\busra\Pictures\hata_tespiti4.0\indir (1).png)
 
